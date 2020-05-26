@@ -105,7 +105,7 @@ func updateTTK(TTK otto.Value) (otto.Value, error) {
 		return TTK, nil
 	}
 
-	resp, err := http.Get("https://translate.google.com")
+	resp, err := http.Get("https://translate.google.cn")
 	if err != nil {
 		return otto.UndefinedValue(), err
 	}
