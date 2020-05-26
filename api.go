@@ -12,7 +12,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-const gt = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=%s&tl=%s&dt=t&q=%s"
+const gt = "https://translate.googleapis.cn/translate_a/single?client=gtx&sl=%s&tl=%s&dt=t&q=%s"
 
 func translateOld(text, from, to string, withVerification bool) (string, error) {
 	if withVerification {
