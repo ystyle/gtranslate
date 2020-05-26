@@ -1,21 +1,25 @@
-# gtranslate ![build](https://travis-ci.com/bregydoc/gtranslate.svg?branch=master)
+# gtranslate 
 
 Google Translate API for unlimited and free translations 📢.
-This project was inspired by [google-translate-api](https://github.com/matheuss/google-translate-api) and [google-translate-token](https://github.com/matheuss/google-translate-token).
 
 # Install
 
-    go get github.com/bregydoc/gtranslate
+    go get github.com/ystyle/gtranslate
 
 # Use
 
 ```go
+// set google domain (if you need)
+gtranslate.SetGoogleDomain("https://translate.google.cn")
+
+// translate
 gtranslate.Translate("I'm alive", language.English, language.Spanish)
+gtranslate.TranslateWithParams("I'm alive", gtranslate.TranslateWithParams{From: "en", To: "es"})
+
 ```
 
-```go
-gtranslate.TranslateWithParams("I'm alive", gtranslate.TranslateWithParams{From: "en", To: "es"})
-```
+
+
 
 # Example
 
@@ -24,24 +28,25 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/bregydoc/gtranslate"
+	"github.com/ystyle/gtranslate"
+	"time"
 )
 
 func main() {
 	text := "Hello World"
+	start := time.Now()
 	translated, err := gtranslate.TranslateWithParams(
 		text,
 		gtranslate.TranslationParams{
 			From: "en",
-			To:   "ja",
+			To:   "zh",
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("en: %s | ja: %s \n", text, translated)
-	// en: Hello World | ja: こんにちは世界
+	fmt.Printf("en: %s | zh: %s | time: %s\n", text, translated, time.Now().Sub(start))
+	// en: Hello World | zh: 你好，世界 | time: 547.2785ms
 }
 ```

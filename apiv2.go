@@ -2,6 +2,7 @@ package gtranslate
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -10,18 +11,20 @@ import (
 
 	"golang.org/x/text/language"
 
-	"github.com/robertkrimen/otto"
+	gt "github.com/kyai/google-translate-tk"
 )
 
-var ttk otto.Value
-
-func init() {
-	ttk, _ = otto.ToValue("0")
-}
+var (
+	domain = "https://translate.google.com"
+)
 
 const (
 	defaultNumberOfRetries = 2
 )
+
+func SetGoogleDomain(url string) {
+	domain = url
+}
 
 func translate(text, from, to string, withVerification bool, tries int, delay time.Duration) (string, error) {
 	if tries == 0 {
@@ -38,12 +41,12 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 			to = "en"
 		}
 	}
-
-	t, _ := otto.ToValue(text)
-
-	urll := "https://translate.google.cn/translate_a/single"
-
-	token := get(t, ttk)
+	urll := fmt.Sprintf("%s/translate_a/single", domain)
+	tkk, err := gt.GetTKK()
+	if err != nil {
+		return "", err
+	}
+	token := gt.GetTK("hello", tkk)
 
 	data := map[string]string{
 		"client": "gtx",
@@ -105,7 +108,7 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 
 	var resp []interface{}
 
-	err = json.Unmarshal([]byte(raw), &resp)
+	err = json.Unmarshal(raw, &resp)
 	if err != nil {
 		return "", err
 	}
